@@ -291,6 +291,19 @@
      <string>wss://localhost</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="connPushButton">
+    <property name="geometry">
+     <rect>
+      <x>360</x>
+      <y>10</y>
+      <width>80</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>接続</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -304,6 +317,21 @@
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
+ <tabstops>
+  <tabstop>remoteLineEdit</tabstop>
+  <tabstop>connPushButton</tabstop>
+  <tabstop>comboBox</tabstop>
+  <tabstop>emailLineEdit</tabstop>
+  <tabstop>passLineEdit</tabstop>
+  <tabstop>loginPushButton</tabstop>
+  <tabstop>radioButton</tabstop>
+  <tabstop>radioButton_2</tabstop>
+  <tabstop>listView</tabstop>
+  <tabstop>historyPushButton</tabstop>
+  <tabstop>textEdit</tabstop>
+  <tabstop>requestTextEdit</tabstop>
+  <tabstop>sendPushButton</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
  <buttongroups>

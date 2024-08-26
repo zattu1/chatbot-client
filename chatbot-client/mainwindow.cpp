@@ -7,14 +7,24 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    setEnableWindow(false);
     getRegistration();
     connect(ui->emailLineEdit, SIGNAL(editingFinished()), this, SLOT(onLogin()));
     connect(ui->passLineEdit, SIGNAL(editingFinished()), this, SLOT(onPassword()));
     on_comboBox_currentIndexChanged(0);
+
+    m_pWebSocket = new QWebSocket(QString(), QWebSocketProtocol::VersionLatest, this);
+    connect(m_pWebSocket, SIGNAL(connected()), this, SLOT(onConnected()));
+    connect(m_pWebSocket, SIGNAL(disconnected()), this, SLOT(onDisconnected()));
+    connect(m_pWebSocket, SIGNAL(errorOccurred(QAbstractSocket::SocketError)), this, SLOT(onError(QAbstractSocket::SocketError)));
+    connect(m_pWebSocket, SIGNAL(handshakeInterruptedOnError(QSslError)), this, SLOT(onHandshakeError(QSslError)));
+    connect(m_pWebSocket, SIGNAL(binaryMessageReceived(QByteArray)), this, SLOT(onReceiveData(QByteArray)));
+    connect(m_pWebSocket, SIGNAL(textMessageReceived(QString)), this, SLOT(onReceiveMsg(QString)));
 }
 
 MainWindow::~MainWindow()
 {
+    m_pWebSocket->deleteLater();
     delete ui;
 }
 
@@ -74,10 +84,38 @@ void MainWindow::onPassword()
     m_personalInformation[ui->comboBox->currentIndex()].m_pass = ui->passLineEdit->text();
 }
 
+void MainWindow::on_connPushButton_clicked()
+{
+    if(ui->connPushButton->text() == "接続") {
+        m_pWebSocket->open(ui->remoteLineEdit->text());
+        ui->remoteLineEdit->setEnabled(false);
+        ui->connPushButton->setEnabled(false);
+    }else {
+        m_pWebSocket->close();
+        ui->remoteLineEdit->setEnabled(true);
+        ui->connPushButton->setEnabled(true);
+    }
+}
 
 void MainWindow::on_loginPushButton_clicked()
 {
+    if(ui->loginPushButton->text() == "ログイン") {
+        ui->comboBox->setEnabled(false);
+        ui->emailLineEdit->setEnabled(false);
+        ui->passLineEdit->setEnabled(false);
 
+        QJsonObject root;
+        root["id"] = 1; // ログイン
+        root["email"] = ui->emailLineEdit->text();
+        root["password"] = ui->passLineEdit->text();
+        QJsonDocument d(root);
+        m_pWebSocket->sendBinaryMessage(d.toJson(QJsonDocument::Compact));
+    }else {
+        QJsonObject root;
+        root["id"] = 4; // ログオフ
+        QJsonDocument d(root);
+        m_pWebSocket->sendBinaryMessage(d.toJson(QJsonDocument::Compact));
+    }
 }
 
 
@@ -92,3 +130,66 @@ void MainWindow::on_sendPushButton_clicked()
 
 }
 
+void MainWindow::onConnected()
+{
+    setEnableWindow(true);
+    ui->connPushButton->setText("切断");
+}
+
+void MainWindow::onDisconnected()
+{
+    setEnableWindow(false);
+}
+
+void MainWindow::onError(QAbstractSocket::SocketError error)
+{
+
+}
+
+void MainWindow::onHandshakeError(const QSslError &error)
+{
+    setEnableWindow(false);
+}
+
+void MainWindow::onReceiveMsg(QString message)
+{
+
+}
+
+void MainWindow::onReceiveData(QByteArray message)
+{
+    QJsonDocument doc = QJsonDocument::fromJson(message);
+    if(!doc.isObject()) {
+        return;
+    }
+
+    QJsonObject o = doc.object();
+    int method = o["id"].toInt();
+    switch(method) {
+    case 1: {   // Login
+        break; }
+    case 2: {   // History
+        break; }
+    case 3: {   // Message
+        break; }
+    case 4: {   // Logout
+        break; }
+    case 5: {   // History set
+
+    }
+    default:
+        break;
+    }
+}
+
+void MainWindow::setEnableWindow(bool bEnable)
+{
+    QList<QWidget *> list = findChildren<QWidget *>();
+    for(int ii=0; ii<list.count(); ii++) {
+        if(list[ii]->objectName() != "label_4" &&
+           list[ii]->objectName() != "remoteLineEdit" &&
+           list[ii]->objectName() != "connPushButton") {
+           list[ii]->setEnabled(bEnable);
+        }
+    }
+}
