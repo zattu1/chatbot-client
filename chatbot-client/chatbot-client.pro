@@ -10,10 +10,12 @@ CONFIG += c++17
 
 SOURCES += \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    clogthread.cpp
 
 HEADERS += \
-    mainwindow.h
+    mainwindow.h \
+    clogthread.h
 
 FORMS += \
     mainwindow.ui

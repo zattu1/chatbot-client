@@ -7,11 +7,11 @@
     <x>0</x>
     <y>0</y>
     <width>973</width>
-    <height>741</height>
+    <height>714</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Chat BOT Client</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QComboBox" name="comboBox">
@@ -93,6 +93,9 @@
       <height>24</height>
      </rect>
     </property>
+    <property name="echoMode">
+     <enum>QLineEdit::EchoMode::Password</enum>
+    </property>
    </widget>
    <widget class="QLabel" name="label">
     <property name="geometry">
@@ -146,17 +149,7 @@
      <string>ログイン</string>
     </property>
    </widget>
-   <widget class="QListView" name="listView">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>100</y>
-      <width>191</width>
-      <height>541</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QTextEdit" name="textEdit">
+   <widget class="QTextEdit" name="replyTextEdit">
     <property name="geometry">
      <rect>
       <x>210</x>
@@ -165,54 +158,9 @@
       <height>501</height>
      </rect>
     </property>
-   </widget>
-   <widget class="QGroupBox" name="groupBox">
-    <property name="geometry">
-     <rect>
-      <x>759</x>
-      <y>36</y>
-      <width>201</width>
-      <height>51</height>
-     </rect>
+    <property name="readOnly">
+     <bool>true</bool>
     </property>
-    <property name="title">
-     <string/>
-    </property>
-    <widget class="QRadioButton" name="radioButton">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>25</y>
-       <width>71</width>
-       <height>22</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>生データ</string>
-     </property>
-     <property name="checked">
-      <bool>true</bool>
-     </property>
-     <attribute name="buttonGroup">
-      <string notr="true">buttonGroup</string>
-     </attribute>
-    </widget>
-    <widget class="QRadioButton" name="radioButton_2">
-     <property name="geometry">
-      <rect>
-       <x>100</x>
-       <y>25</y>
-       <width>91</width>
-       <height>22</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>HTML整形</string>
-     </property>
-     <attribute name="buttonGroup">
-      <string notr="true">buttonGroup</string>
-     </attribute>
-    </widget>
    </widget>
    <widget class="QTextEdit" name="requestTextEdit">
     <property name="geometry">
@@ -235,12 +183,13 @@
     </property>
     <property name="font">
      <font>
-      <pointsize>16</pointsize>
+      <pointsize>12</pointsize>
       <bold>true</bold>
      </font>
     </property>
     <property name="text">
-     <string>送信</string>
+     <string>送信
+(Ctrl+Enter)</string>
     </property>
    </widget>
    <widget class="QPushButton" name="historyPushButton">
@@ -265,7 +214,7 @@
    <widget class="QLabel" name="label_4">
     <property name="geometry">
      <rect>
-      <x>24</x>
+      <x>10</x>
       <y>13</y>
       <width>49</width>
       <height>16</height>
@@ -278,7 +227,7 @@
    <widget class="QLineEdit" name="remoteLineEdit">
     <property name="geometry">
      <rect>
-      <x>80</x>
+      <x>60</x>
       <y>10</y>
       <width>261</width>
       <height>24</height>
@@ -288,13 +237,16 @@
      <string/>
     </property>
     <property name="text">
-     <string>wss://localhost</string>
+     <string/>
+    </property>
+    <property name="placeholderText">
+     <string>ws://127.0.0.1:55554</string>
     </property>
    </widget>
    <widget class="QPushButton" name="connPushButton">
     <property name="geometry">
      <rect>
-      <x>360</x>
+      <x>330</x>
       <y>10</y>
       <width>80</width>
       <height>24</height>
@@ -304,6 +256,88 @@
      <string>接続</string>
     </property>
    </widget>
+   <widget class="QListWidget" name="historyListWidget">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>100</y>
+      <width>191</width>
+      <height>541</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string>ダブルクリックで実行</string>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="radioButton_2">
+    <property name="geometry">
+     <rect>
+      <x>850</x>
+      <y>60</y>
+      <width>91</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>HTML整形</string>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttonGroup</string>
+    </attribute>
+   </widget>
+   <widget class="QRadioButton" name="radioButton">
+    <property name="geometry">
+     <rect>
+      <x>770</x>
+      <y>60</y>
+      <width>71</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>生データ</string>
+    </property>
+    <property name="checked">
+     <bool>true</bool>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttonGroup</string>
+    </attribute>
+   </widget>
+   <widget class="QFrame" name="frame">
+    <property name="geometry">
+     <rect>
+      <x>760</x>
+      <y>50</y>
+      <width>181</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::Shape::Box</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Shadow::Raised</enum>
+    </property>
+   </widget>
+   <zorder>frame</zorder>
+   <zorder>comboBox</zorder>
+   <zorder>emailLineEdit</zorder>
+   <zorder>passLineEdit</zorder>
+   <zorder>label</zorder>
+   <zorder>label_2</zorder>
+   <zorder>label_3</zorder>
+   <zorder>loginPushButton</zorder>
+   <zorder>replyTextEdit</zorder>
+   <zorder>requestTextEdit</zorder>
+   <zorder>sendPushButton</zorder>
+   <zorder>historyPushButton</zorder>
+   <zorder>label_4</zorder>
+   <zorder>remoteLineEdit</zorder>
+   <zorder>connPushButton</zorder>
+   <zorder>historyListWidget</zorder>
+   <zorder>radioButton_2</zorder>
+   <zorder>radioButton</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -326,9 +360,8 @@
   <tabstop>loginPushButton</tabstop>
   <tabstop>radioButton</tabstop>
   <tabstop>radioButton_2</tabstop>
-  <tabstop>listView</tabstop>
   <tabstop>historyPushButton</tabstop>
-  <tabstop>textEdit</tabstop>
+  <tabstop>replyTextEdit</tabstop>
   <tabstop>requestTextEdit</tabstop>
   <tabstop>sendPushButton</tabstop>
  </tabstops>
