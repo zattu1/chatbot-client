@@ -78,6 +78,7 @@ void MainWindow::on_historyListWidget_itemDoubleClicked(QListWidgetItem *item)
         root["url"] = item->data(Qt::UserRole).toString();
         QJsonDocument d(root);
         m_pWebSocket->sendBinaryMessage(d.toJson(QJsonDocument::Compact));
+        t->DbgPrint(d.toJson(QJsonDocument::Compact), false);
     }
 }
 
@@ -153,15 +154,16 @@ void MainWindow::on_loginPushButton_clicked()
         root["password"] = ui->passLineEdit->text();
         QJsonDocument d(root);
         m_pWebSocket->sendBinaryMessage(d.toJson(QJsonDocument::Compact));
+        t->DbgPrint(d.toJson(QJsonDocument::Compact), false);
     }else {
         t->DbgPrint("ログアウト施行中...");
         QJsonObject root;
         root["id"] = 4; // ログアウト
         QJsonDocument d(root);
         m_pWebSocket->sendBinaryMessage(d.toJson(QJsonDocument::Compact));
+        t->DbgPrint(d.toJson(QJsonDocument::Compact), false);
     }
 }
-
 
 void MainWindow::on_historyPushButton_clicked()
 {
@@ -172,8 +174,8 @@ void MainWindow::on_historyPushButton_clicked()
     root["id"] = 2; // 履歴取得
     QJsonDocument d(root);
     m_pWebSocket->sendBinaryMessage(d.toJson(QJsonDocument::Compact));
+    t->DbgPrint(d.toJson(QJsonDocument::Compact), false);
 }
-
 
 void MainWindow::on_sendPushButton_clicked()
 {
@@ -187,6 +189,7 @@ void MainWindow::on_sendPushButton_clicked()
     QJsonDocument d(root);
     m_pWebSocket->sendBinaryMessage(d.toJson(QJsonDocument::Compact));
     ui->requestTextEdit->setFocus();
+    t->DbgPrint(d.toJson(QJsonDocument::Compact), false);
 }
 
 void MainWindow::onStatusChanged(QAbstractSocket::SocketState state)
@@ -245,7 +248,7 @@ void MainWindow::onReceiveMsg(QString message)
 
 void MainWindow::onReceiveData(QByteArray message)
 {
-    qDebug() << Q_FUNC_INFO << message;
+    t->DbgPrint(message, false);
     QJsonDocument doc = QJsonDocument::fromJson(message);
     if(!doc.isObject()) {
         t->DbgPrint("Json Parser Error!!");
@@ -253,10 +256,6 @@ void MainWindow::onReceiveData(QByteArray message)
     }
     QJsonObject o = doc.object();
     QString result = o["result"].toString();
-    if(result == "Wait") {
-        t->DbgPrint(o["reason"].toString());
-        return;
-    }
     int id = o["id"].toInt();
     switch(id) {
     case 1: {   // Login
@@ -268,7 +267,7 @@ void MainWindow::onReceiveData(QByteArray message)
         t->DbgPrint(o["reason"].toString());
         break; }
     case 2: {   // History List
-        if(result == "OK") {
+        if(result == "OK" || result == "Wait") {
             ui->historyListWidget->clear();
             if(o["count"].toInt() > 0) {
                 QJsonArray arr = o["history"].toArray();
@@ -279,7 +278,12 @@ void MainWindow::onReceiveData(QByteArray message)
                     item->setText(obj["subject"].toString());
                     ui->historyListWidget->addItem(item);
                 }
-                t->DbgPrint(QString("取得完了(id:%1)").arg(id));
+                if(result == "OK") {
+                    t->DbgPrint(QString("取得完了(id:%1)").arg(id));
+                }else {
+                    t->DbgPrint(QString("取得中...(id:%1)").arg(id));
+                    break;
+                }
             }else {
                 t->DbgPrint(QString("データなし(id:%1)").arg(id));
             }
@@ -290,14 +294,19 @@ void MainWindow::onReceiveData(QByteArray message)
         ui->historyListWidget->setEnabled(true);
         break; }
     case 3: {   // Message
-        if(result == "OK") {
+        if(result == "OK" || result == "Wait") {
             QString strHtml;
             QJsonArray arr = o["reply"].toArray();
             for(const auto &v: arr) {
                 strHtml += v.toString();
             }
             ui->replyTextEdit->setHtml(strHtml);
-            t->DbgPrint(QString("model : %1").arg(o["model"].toString()));
+            if(result == "OK") {
+                t->DbgPrint(QString("取得完了 [model:%1]").arg(o["model"].toString()));
+            }else {
+                t->DbgPrint(QString("取得中...(id:%1)").arg(id));
+                break;
+            }
         }else {
             t->DbgPrint(o["reason"].toString());
         }
@@ -320,7 +329,6 @@ void MainWindow::onReceiveData(QByteArray message)
             QString strHtml;
             QJsonArray arr = o["reply"].toArray();
             for(const auto &a: arr) {
-                qDebug() << a;
                 strHtml += a.toString();
             }
             ui->replyTextEdit->setHtml(strHtml);

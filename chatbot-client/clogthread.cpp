@@ -4,7 +4,8 @@
 
 CLogThread::CLogThread()
 {
-    m_strFilePath = QString("%1%2Log").arg(QCoreApplication::applicationDirPath()).arg(QDir::separator());
+    m_strFilePath = QString("%1%2Log%3chatbot-client")
+                        .arg(QCoreApplication::applicationDirPath()).arg(QDir::separator()).arg(QDir::separator());
     m_dir = QDir(m_strFilePath);
     MakeDir(m_strFilePath);
 }
@@ -82,9 +83,7 @@ void CTraceLog::DbgPrint(QString str, bool bStatusBar)
                           .arg((qint64)QThread::currentThread())
 #endif
                           .arg(str);
-#ifndef _RELEASE
     qDebug() << strTime;
-#endif
     emit logOut(strTime);
     if(bStatusBar && m_pMainWindow->isWindow()) {
         emit showStatusMessage(strTime, 60000);
