@@ -260,13 +260,26 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>100</y>
+      <y>130</y>
       <width>191</width>
-      <height>541</height>
+      <height>511</height>
      </rect>
     </property>
     <property name="toolTip">
      <string>ダブルクリックで実行</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="newChatPushButton">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>100</y>
+      <width>191</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>新しいチャット</string>
     </property>
    </widget>
   </widget>
@@ -289,6 +302,7 @@
   <tabstop>emailLineEdit</tabstop>
   <tabstop>passLineEdit</tabstop>
   <tabstop>loginPushButton</tabstop>
+  <tabstop>newChatPushButton</tabstop>
   <tabstop>historyListWidget</tabstop>
   <tabstop>historyPushButton</tabstop>
   <tabstop>replyTextEdit</tabstop>
@@ -297,7 +311,4 @@
  </tabstops>
  <resources/>
  <connections/>
- <buttongroups>
-  <buttongroup name="buttonGroup"/>
- </buttongroups>
 </ui>

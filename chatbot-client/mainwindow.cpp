@@ -70,6 +70,16 @@ void MainWindow::on_comboBox_currentIndexChanged(int index)
     ui->passLineEdit->setText(m_personalInformation[index].m_pass);
 }
 
+void MainWindow::on_newChatPushButton_clicked()
+{
+    QJsonObject root;
+    root["id"] = 5;     // 履歴表示
+    root["url"] = "/";
+    QJsonDocument d(root);
+    m_pWebSocket->sendBinaryMessage(d.toJson(QJsonDocument::Compact));
+    t->DbgPrint(d.toJson(QJsonDocument::Compact), false);
+}
+
 void MainWindow::on_historyListWidget_itemDoubleClicked(QListWidgetItem *item)
 {
     if(item) {

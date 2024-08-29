@@ -51,6 +51,7 @@ private:
 private slots:
     void on_requestTextEdit_textChanged();
     void on_comboBox_currentIndexChanged(int index);
+    void on_newChatPushButton_clicked();
     void on_historyListWidget_itemDoubleClicked(QListWidgetItem *item);
     void onEmail();
     void onPassword();
