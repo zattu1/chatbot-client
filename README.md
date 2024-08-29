@@ -141,12 +141,10 @@ ChatBOTから以下の応答があります。
     "result":"Wait"
     "reply":[
         "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-        "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-        "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
         "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
     ]
 }
-※reply配列の先頭が「あなた」のメッセージで、それ以降はChatGPTのメッセージです
+※先頭から順に「あなた」、「ChatGPT」の順になります
 ※メッセージは、HTMLタグを含んでいます
 
 ・ChatGPTがメッセージ応答し終わったとき。
@@ -155,12 +153,10 @@ ChatBOTから以下の応答があります。
     "result":"OK"
     "reply":[
         "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-        "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-        "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
         "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
     ]
 }
-※reply配列の先頭が「あなた」のメッセージで、それ以降はChatGPTのメッセージです
+※先頭から順に「あなた」、「ChatGPT」の順になります
 ※メッセージは、HTMLタグを含んでいます
 
 ```
