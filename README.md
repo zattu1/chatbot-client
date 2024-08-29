@@ -1,4 +1,4 @@
-# Chat BOT [https://zatturight.com/fastbot/product/85]
+# Chat BOT [https://zatturight.com/fastbot/products/detail/85]
 CharBOTは、BOT内蔵のブラウザ版ChatGPTに対してWebSocketから命令を行うことで、ChatGPT APIを利用しなくてもそれらしい動きをしてくれるツールです。<br>
 ChatBOTはWebSocketServerとして動作します。Client側は「ws://xxx.xxx.xxx.xxx:55554」で接続します。<br>
 セキュアな通信も可能です。chatbot.exeと同じ階層にサーバ証明書（server.key, server.crt）を配置後にchatbot.exeを起動します。Client側は「wss://xxx.xxx.xxx.xxx:55554」で接続します。<br>
