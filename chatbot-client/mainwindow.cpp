@@ -22,8 +22,8 @@ MainWindow::MainWindow(QWidget *parent)
     QSslConfiguration sslConfiguration = QSslConfiguration::defaultConfiguration();
     sslConfiguration.setPeerVerifyMode(QSslSocket::VerifyNone);  // 自己署名証明書を許可
     m_pWebSocket->setSslConfiguration(sslConfiguration);
-    connect(m_pWebSocket, SIGNAL(connected()), this, SLOT(onConnected()));
-    connect(m_pWebSocket, SIGNAL(disconnected()), this, SLOT(onDisconnected()));
+    //connect(m_pWebSocket, SIGNAL(connected()), this, SLOT(onConnected()));
+    //connect(m_pWebSocket, SIGNAL(disconnected()), this, SLOT(onDisconnected()));
     connect(m_pWebSocket, SIGNAL(stateChanged(QAbstractSocket::SocketState)), this, SLOT(onStatusChanged(QAbstractSocket::SocketState)));
     connect(m_pWebSocket, SIGNAL(errorOccurred(QAbstractSocket::SocketError)), this, SLOT(onSocketError(QAbstractSocket::SocketError)));
     connect(m_pWebSocket, SIGNAL(handshakeInterruptedOnError(QSslError)), this, SLOT(onHandshakeError(QSslError)));
